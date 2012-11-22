@@ -14,12 +14,16 @@ namespace SurfinUSA.Web
         {
             Get["/"] = _ => Response.AsRedirect("/nexus4", Nancy.Responses.RedirectResponse.RedirectType.SeeOther);
 
-            Get["/nexus4"] = _ => Response.AsText(
-                new HttpClient()
-                .Get("http://play.google.com/store/devices/details?id=nexus_4_16gb&feature=microsite&hl=en")
-                .RawText
-                .Contains("We are out of inventory. Please check back soon.") ? "Fortfarande slut." : "Nu finns telefonen inne!"
-            );
+            Get["/nexus4"] = _ =>
+                Response.AsText(
+                    String.Format(
+                        new HttpClient()
+                            .Get("http://play.google.com/store/devices/details?id=nexus_4_16gb&feature=microsite&hl=en")
+                            .RawText
+                            .Contains("We are out of inventory. Please check back soon.") ? "Fortfarande slut {0}" : "Nu finns telefonen inne {0}!", 
+                        DateTime.Now.ToString("G")
+                    )
+                );
 
             Get["/surf"] = _ =>
                 {
