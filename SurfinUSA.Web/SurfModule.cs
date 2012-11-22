@@ -12,8 +12,14 @@ namespace SurfinUSA.Web
     {
         public SurfModule()
         {
-            // Eftersom jag vet hur man mappar rooten till den statiska filen index.html avnäds denna redirect istället
-            Get["/"] = _ => Response.AsRedirect("/index.html", Nancy.Responses.RedirectResponse.RedirectType.SeeOther);
+            Get["/"] = _ => Response.AsRedirect("/nexus4", Nancy.Responses.RedirectResponse.RedirectType.SeeOther);
+
+            Get["/nexus4"] = _ => Response.AsText(
+                new HttpClient()
+                .Get("http://play.google.com/store/devices/details?id=nexus_4_16gb&feature=microsite&hl=en")
+                .RawText
+                .Contains("We are out of inventory. Please check back soon.") ? "Fortfarande slut." : "Nu finns telefonen inne!"
+            );
 
             Get["/surf"] = _ =>
                 {
